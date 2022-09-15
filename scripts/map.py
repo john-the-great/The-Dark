@@ -105,6 +105,7 @@ class MapC:
             if not self.world_data[key][0] == None:
                 if abs(player_pos[0] - x-self.TILE_SIZE/2) < self.x_dis and abs(player_pos[1] - y-self.TILE_SIZE/2) < self.y_dis:
                     surf.blit(self.world_data[key][0], (x-scroll[0], y-scroll[1]))
+                    #pygame.draw.rect(surf, (255, 255, 255), (x-scroll[0], y-scroll[1], self.world_data[key][0].get_width(), self.world_data[key][0].get_height()), 1)
                 if abs(player_pos[0] - x-self.TILE_SIZE/2) < self.sim_dis and abs(player_pos[1] - y-self.TILE_SIZE/2) < self.sim_dis:
                     if not self.world_data[key][1] == 'tile9.png':
                         if self.world_data[key][1] == '4chunk':

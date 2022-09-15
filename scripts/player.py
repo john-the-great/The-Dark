@@ -147,7 +147,7 @@ class Player:
                     collis['left'] = True
             elif self.rect.left < tile.right and self.rect.right > tile.left:
                 if abs(self.rect.top - tile.bottom) < tolerance:
-                    self.falling = 0
+                    self.falling = 1
                     collis['top'] = True
                 elif abs(self.rect.bottom - tile.top) < tolerance:
                     self.rect.bottom = tile.top

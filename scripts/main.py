@@ -15,9 +15,12 @@ def main():
     fps_cap, rel_fps = 10_000, 60
 
     tscroll = [0, 0]
+
+    time = 0
+    ticks = 0
     #############
 
-    map = MapC('data/map/physical_map_data', 'data/images/map', [30, 150, 150])
+    map = MapC('data/map/physical_map_data', 'data/images/map', [15, 150, 150])
     map.convert_tile_size(8)
     map.slice_chunks()
 
@@ -33,6 +36,13 @@ def main():
         scroll = tscroll.copy()
         scroll[0] = int(scroll[0])
         scroll[1] = int(scroll[1])
+
+        time += 1 * dt
+        ticks += 1
+        if time >= rel_fps:
+            print(f'fps: {ticks}')
+            time = 0
+            ticks = 0
 
         #NEW FRAME#
         game_surf.fill((200, 200, 200))
