@@ -26,16 +26,16 @@ def main():
     while 1:
         dt = clock.tick(fps_cap) * .001 * rel_fps
 
-        size_diffx = (WINDOW_SIZE[0]/RES[0]*2)+1
-        size_diffy = (WINDOW_SIZE[1]/RES[1]*2)+1
-        tscroll[0] += (((player.rect.x-player.size/2 - tscroll[0]) - (WINDOW_SIZE[0]/size_diffx)))/20 * dt
-        tscroll[1] += (((player.rect.y-player.size/2 - tscroll[1]) - (WINDOW_SIZE[1]/size_diffy)))/20 * dt
+        size_diffx = (WINDOW_SIZE[0]/RES[0]*1.65)+1
+        size_diffy = (WINDOW_SIZE[1]/RES[1]*1.65)+1
+        tscroll[0] += (((player.rect.centerx - tscroll[0]) - (WINDOW_SIZE[0]/size_diffx)))/20 * dt
+        tscroll[1] += (((player.rect.centery - tscroll[1]) - (WINDOW_SIZE[1]/size_diffy)))/20 * dt
         scroll = tscroll.copy()
         scroll[0] = int(scroll[0])
         scroll[1] = int(scroll[1])
 
         #NEW FRAME#
-        game_surf.fill((0, 0, 0))
+        game_surf.fill((200, 200, 200))
         player_pos = [player.rect.x, player.rect.y]
         tiles = map.show_map(game_surf, player_pos, scroll)
         #NEW FRAME#
@@ -46,14 +46,24 @@ def main():
                 case pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-        player.movement(dt)
         collis = player.physics(tiles)
+        player.movement(dt, collis)
+        if player.falling > .5:
+            player.ground_touches = 0
+            player.hit_ground = False
         if collis['bottom']:
             player.movement_data['jump_timer'] = 0
+            if player.ground_touches < 3:
+                player.hit_ground = True
+            else:
+                player.hit_ground = False
+                player.ground_touches -= .2 * dt
+            player.ground_touches += .2 * dt
+            player.falling = 0
         #MECHANICS#
 
         #RENDER#
-        player.render(game_surf, scroll)
+        player.render(game_surf, scroll, dt)
         #RENDER#
 
         #DISPLAY#

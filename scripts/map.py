@@ -83,6 +83,8 @@ class MapC:
                         marked.append(f'{x+self.TILE_SIZE} {y}')
                         marked.append(f'{x} {y+self.TILE_SIZE}')
                         marked.append(f'{x+self.TILE_SIZE} {y+self.TILE_SIZE}')
+                        tmp_surf.convert()
+                        tmp_surf.set_colorkey((0, 0, 0, 0))
                         chunk_data[key] = [tmp_surf, '4chunk']
                 else:
                     if tile_data[key][0] != None:
