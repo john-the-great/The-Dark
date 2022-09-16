@@ -1,7 +1,18 @@
 import pygame, sys
 from pygame.locals import *
+from random import uniform, randint
 from map import MapC
 from player import Player
+from background.square_objects import S_Objects as square_bg_object
+
+def run_bg_objects(surf, scroll, dt, bgobj_list):
+    for id, obj in enumerate(bgobj_list):
+        #delete obj if its above the screen
+        if obj.pos[1] <= 0:
+            del bgobj_list[id]
+        obj.move(dt)
+        obj.render(surf, scroll)
+    return bgobj_list
 
 def main():
     #PYGAME INIT#
@@ -26,8 +37,13 @@ def main():
 
     player = Player()
 
+    #BACKGROUND#
+    #bgobj_list = []
+    #BACKGROUND#
+
     while 1:
-        dt = clock.tick(fps_cap) * .001 * rel_fps
+        fps = clock.tick(fps_cap)
+        dt = fps * .001 * rel_fps
 
         size_diffx = (WINDOW_SIZE[0]/RES[0]*1.65)+1
         size_diffy = (WINDOW_SIZE[1]/RES[1]*1.65)+1
@@ -43,9 +59,16 @@ def main():
             print(f'fps: {ticks}')
             time = 0
             ticks = 0
+            # colour, r_propeties, vels, player_y
+            #colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+            #r_propeties = (randint(int(player.rect.x-90), int(player.rect.x+90)), randint(15, 25), randint(15, 25))
+            #vels = [uniform(-1, 1), uniform(-.2, -.6), randint(5, 5)]
+            #bgobj_list.append(
+            #    square_bg_object(colour, r_propeties, vels, player.rect.y))
 
         #NEW FRAME#
         game_surf.fill((200, 200, 200))
+        #bgobj_list = run_bg_objects(game_surf, scroll, dt, bgobj_list)
         player_pos = [player.rect.x, player.rect.y]
         tiles = map.show_map(game_surf, player_pos, scroll)
         #NEW FRAME#

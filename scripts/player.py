@@ -71,6 +71,7 @@ class Player:
         self.movement_data['jump_timer'] += 1
         set_to_jump = False
         set_to_hitground = False
+        #hitground override set_to_jump
         if self.hit_ground:
             set_to_hitground = True
         if 'jump' in self.curr_mov and not collis['bottom'] and not set_to_hitground:
