@@ -19,7 +19,8 @@ class Player:
         self.ground_touches = 0
         self.hit_ground = False
 
-        self.image_dir = 'data/images/player/'
+        self.skin_type = 'default'
+        self.image_dir = f'data/images/player/{self.skin_type}/'
         self.image_id = 0
         self.animations = {
             'run_right':[], 'run_left':[],

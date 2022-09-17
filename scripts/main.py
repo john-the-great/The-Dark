@@ -26,12 +26,13 @@ def main():
     fps_cap, rel_fps = 10_000, 60
 
     tscroll = [0, 0]
+    para_tscroll = [0, 0]
 
     time = 0
     ticks = 0
     #############
 
-    map = MapC('data/map/physical_map_data', 'data/images/map', [15, 150, 150])
+    map = MapC('data/map/physical_map_data', 'data/images/map', [30, 150, 150])
     map.convert_tile_size(8)
     map.slice_chunks()
 
@@ -39,6 +40,11 @@ def main():
 
     #BACKGROUND#
     #bgobj_list = []
+    bg_objs = {
+    'green_obj': {
+        'y':400
+        }
+    }
     #BACKGROUND#
 
     while 1:
@@ -52,6 +58,12 @@ def main():
         scroll = tscroll.copy()
         scroll[0] = int(scroll[0])
         scroll[1] = int(scroll[1])
+
+        para_tscroll[0] += (player.rect.centerx - para_tscroll[0])/20 * dt
+        para_tscroll[1] += (player.rect.centery - para_tscroll[1])/20 * dt
+        para_scroll = para_tscroll.copy()
+        para_scroll[0] = int(para_scroll[0])
+        para_scroll[1] = int(para_scroll[1])
 
         time += 1 * dt
         ticks += 1
@@ -67,7 +79,10 @@ def main():
             #    square_bg_object(colour, r_propeties, vels, player.rect.y))
 
         #NEW FRAME#
-        game_surf.fill((200, 200, 200))
+        game_surf.fill((0, 125, 225))
+        pygame.draw.rect(game_surf, (0, 185, 0),
+            (bg_objs['green_obj']['x'], bg_objs['green_obj']['y']-para_scroll[1],
+            WINDOW_SIZE[0], 125))
         #bgobj_list = run_bg_objects(game_surf, scroll, dt, bgobj_list)
         player_pos = [player.rect.x, player.rect.y]
         tiles = map.show_map(game_surf, player_pos, scroll)
