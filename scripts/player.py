@@ -3,7 +3,7 @@ import pygame, os
 class Player:
     def __init__(self):
         self.size = 8
-        self.rect = pygame.Rect(300, -10, self.size, self.size)
+        self.rect = pygame.Rect(300, 250, self.size, self.size)
         self.rounded_pos = [
         self.rect.x, self.rect.y]
         self.direc = [0, 0]
@@ -109,7 +109,7 @@ class Player:
 
         if keys[pygame.K_SPACE]:
             if self.movement_data['jump_timer'] < 6:
-                self.falling = -4
+                self.falling = -4.5
                 if self.was_dirs['right']:
                     self.curr_mov = 'jump_right'
                 else:

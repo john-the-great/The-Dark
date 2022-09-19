@@ -4,6 +4,7 @@ from random import uniform, randint
 from map import MapC
 from player import Player
 from background.square_objects import S_Objects as square_bg_object
+from ai.bees import load_bees, run_bees
 
 def run_bg_objects(surf, scroll, dt, bgobj_list):
     for id, obj in enumerate(bgobj_list):
@@ -47,9 +48,20 @@ def main():
     }
     #BACKGROUND#
 
+    #AI#
+    bees = []
+    bee_sim_dis = 120
+    bee_spawn_dis = 150
+    bees = load_bees(bees, bee_spawn_dis, [player.rect.x,
+        player.rect.y])
+    #AI#
+
     while 1:
         fps = clock.tick(fps_cap)
         dt = fps * .001 * rel_fps
+
+        time += 1 * dt
+        ticks += 1
 
         size_diffx = (WINDOW_SIZE[0]/RES[0]*1.65)+1
         size_diffy = (WINDOW_SIZE[1]/RES[1]*1.65)+1
@@ -59,30 +71,17 @@ def main():
         scroll[0] = int(scroll[0])
         scroll[1] = int(scroll[1])
 
-        para_tscroll[0] += (player.rect.centerx - para_tscroll[0])/20 * dt
-        para_tscroll[1] += (player.rect.centery - para_tscroll[1])/20 * dt
-        para_scroll = para_tscroll.copy()
-        para_scroll[0] = int(para_scroll[0])
-        para_scroll[1] = int(para_scroll[1])
-
-        time += 1 * dt
-        ticks += 1
-        if time >= rel_fps:
-            print(f'fps: {ticks}')
-            time = 0
-            ticks = 0
-            # colour, r_propeties, vels, player_y
-            #colour = (randint(0, 255), randint(0, 255), randint(0, 255))
-            #r_propeties = (randint(int(player.rect.x-90), int(player.rect.x+90)), randint(15, 25), randint(15, 25))
-            #vels = [uniform(-1, 1), uniform(-.2, -.6), randint(5, 5)]
-            #bgobj_list.append(
-            #    square_bg_object(colour, r_propeties, vels, player.rect.y))
+        #para_tscroll[0] += (player.rect.centerx - para_tscroll[0])/20 * dt
+        #para_tscroll[1] += (player.rect.centery - para_tscroll[1])/20 * dt
+        #para_scroll = para_tscroll.copy()
+        #para_scroll[0] = int(para_scroll[0])
+        #para_scroll[1] = int(para_scroll[1])
 
         #NEW FRAME#
         game_surf.fill((0, 125, 225))
-        pygame.draw.rect(game_surf, (0, 185, 0),
-            (bg_objs['green_obj']['x'], bg_objs['green_obj']['y']-para_scroll[1],
-            WINDOW_SIZE[0], 125))
+        #pygame.draw.rect(game_surf, (0, 185, 0),
+        #    (bg_objs['green_obj']['x'], bg_objs['green_obj']['y']-para_scroll[1],
+        #    WINDOW_SIZE[0], 125))
         #bgobj_list = run_bg_objects(game_surf, scroll, dt, bgobj_list)
         player_pos = [player.rect.x, player.rect.y]
         tiles = map.show_map(game_surf, player_pos, scroll)
@@ -111,6 +110,7 @@ def main():
         #MECHANICS#
 
         #RENDER#
+        run_bees(bees, bee_sim_dis, player_pos, game_surf, scroll, dt, time, rel_fps)
         player.render(game_surf, scroll, dt)
         #RENDER#
 
@@ -118,6 +118,17 @@ def main():
         scaled_surf = pygame.transform.scale(game_surf, WINDOW_SIZE)
         window.blit(scaled_surf, (0, 0))
         #DISPLAY#
+
+        if time >= rel_fps:
+            print(f'fps: {ticks}')
+            time = 0
+            ticks = 0
+            # colour, r_propeties, vels, player_y
+            #colour = (randint(0, 255), randint(0, 255), randint(0, 255))
+            #r_propeties = (randint(int(player.rect.x-90), int(player.rect.x+90)), randint(15, 25), randint(15, 25))
+            #vels = [uniform(-1, 1), uniform(-.2, -.6), randint(5, 5)]
+            #bgobj_list.append(
+            #    square_bg_object(colour, r_propeties, vels, player.rect.y))
 
         pygame.display.update()
 
