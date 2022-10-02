@@ -46,6 +46,10 @@ def main():
         'y':400
         }
     }
+    bg_image_dir = 'data/images/map/'
+    bg_data = {
+        'tree':[pygame.image.load(f'{bg_image_dir}tree.png'), 284, 232]
+    }
     #BACKGROUND#
 
     #AI#
@@ -78,13 +82,15 @@ def main():
         #para_scroll[1] = int(para_scroll[1])
 
         #NEW FRAME#
-        game_surf.fill((0, 125, 225))
+        game_surf.fill((0, 180, 255))
         #pygame.draw.rect(game_surf, (0, 185, 0),
         #    (bg_objs['green_obj']['x'], bg_objs['green_obj']['y']-para_scroll[1],
         #    WINDOW_SIZE[0], 125))
         #bgobj_list = run_bg_objects(game_surf, scroll, dt, bgobj_list)
         player_pos = [player.rect.x, player.rect.y]
         tiles = map.show_map(game_surf, player_pos, scroll)
+        #tiles = map.show_folliage(game_surf, player_pos, tiles, scroll)
+        map.show_manual_folliage(game_surf, bg_data, scroll)
         #NEW FRAME#
 
         #MECHANICS#
@@ -119,6 +125,7 @@ def main():
         window.blit(scaled_surf, (0, 0))
         #DISPLAY#
 
+        print(player_pos)
         if time >= rel_fps:
             print(f'fps: {ticks}')
             time = 0

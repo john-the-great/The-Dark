@@ -9,12 +9,20 @@ class MapC:
             image = pygame.image.load(image_dir + '/' + self.data[key]).convert()
             image.set_colorkey((0, 0, 0, 0))
             self.world_data[key] = [image, self.data[key]]
-        self.itterate_data = {}
-        for id, key in enumerate(self.world_data):
-            pos = key.split()
-            pos1 = int(pos[0])
-            pos2 = int(pos[1])
-            self.itterate_data[id] = [pos1, pos2]
+        #self.itterate_data = {}
+        #for id, key in enumerate(self.world_data):
+        #    pos = key.split()
+        #    pos1 = int(pos[0])
+        #    pos2 = int(pos[1])
+        #    self.itterate_data[id] = [pos1, pos2]
+
+        self.data = json.load(open(file_name + '_transparent' + '.json'))
+        self.folliage_data = {}
+        for key in self.data:
+            image = pygame.image.load(image_dir + '/' + self.data[key]).convert()
+            image.set_colorkey((0, 0, 0, 0))
+            self.folliage_data[key] = [image, self.data[key]]
+
         self.sim_dis = processed_distances[0]
         self.x_dis = processed_distances[1]
         self.y_dis = processed_distances[2]
@@ -113,3 +121,24 @@ class MapC:
                         else:
                             rect_list.append(pygame.Rect(x, y, self.TILE_SIZE, self.TILE_SIZE))
         return rect_list
+
+    def show_folliage(self, surf, player_pos, rect_list, scroll):
+        for key in self.folliage_data:
+            pos = key.split()
+            x = int(pos[0])
+            y = int(pos[1])
+            if abs(player_pos[0] - x-self.TILE_SIZE/2) < self.x_dis and abs(player_pos[1] - y-self.TILE_SIZE/2) < self.y_dis:
+                height = self.folliage_data[key][0].get_height()/8
+                width = self.folliage_data[key][0].get_width()/8
+                surf.blit(self.folliage_data[key][0], ((x-width*8)+16-scroll[0], (y-height*8)+8-scroll[1]))
+            if self.folliage_data[key][1] == 'tile24.png':
+                if abs(player_pos[0] - x-self.TILE_SIZE/2) < self.sim_dis and abs(player_pos[1] - y-self.TILE_SIZE/2) < self.sim_dis:
+                    rect_list.append(pygame.Rect(x+self.TILE_SIZE*1.4, y+self.TILE_SIZE*3, self.TILE_SIZE, self.TILE_SIZE))
+        return rect_list
+
+    def show_manual_folliage(self, surf, bg_data, scroll):
+        for w in bg_data:
+            image = bg_data[w][0]
+            x = bg_data[w][1]
+            y = bg_data[w][2]
+            surf.blit(image, (x-scroll[0], y-scroll[1]))

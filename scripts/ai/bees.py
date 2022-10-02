@@ -76,8 +76,8 @@ class Bee:
 def load_bees(bees, sim_dis, player_pos):
     amount = 20
     for i in range(amount):
-        x = uniform((player_pos[0] - (sim_dis/2)), (player_pos[0] + (sim_dis/2)))
-        y = uniform(245, (player_pos[1] + (sim_dis/1.2)))
+        x = uniform(200, 600)
+        y = uniform(245, 350)
         bees.append(Bee([x, y]))
     return bees
 
